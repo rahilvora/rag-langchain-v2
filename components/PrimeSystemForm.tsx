@@ -7,7 +7,7 @@ import type { FormEvent } from "react";
 
 export function PrimeSystemForm() {
   async function primeSystem(e: FormEvent<HTMLFormElement>) {
-    const url = e.target.getElementsByClassName("doc-site-url-input")[0].value;
+    const url = (e.target as HTMLFormElement).getElementsByClassName("doc-site-url-input")[0];
     e.preventDefault();
     const response = await fetch("/api/chat/quick_start", {
         method: "GET",
@@ -15,7 +15,7 @@ export function PrimeSystemForm() {
         "Content-Type": "application/json",
         },
       });
-      const json = await response.json();
+    const json = await response.json();
       if (response.status === 200) {
         // Represent intermediate steps as system messages for display purposes
         toast(`${json.message}. System is primed` , {

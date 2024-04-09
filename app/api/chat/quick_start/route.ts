@@ -10,6 +10,7 @@ import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createRetrievalChain } from "langchain/chains/retrieval";
 import { Runnable } from "@langchain/core/runnables";
+import { Document } from "langchain/document";
 export const runtime = "edge";
 
 const formatMessage = (message: VercelChatMessage) => {
@@ -83,17 +84,16 @@ async function getDocs() {
     );
     return loader.load();
 }
-
-async function getSplitDocs(docs: Document<Record<string, any>>[]) {;
-    const splitter = new RecursiveCharacterTextSplitter();
-    return splitter.splitDocuments(docs);
+async function getSplitDocs(docs: Document[]) {
+  const splitter = new RecursiveCharacterTextSplitter();
+  return splitter.splitDocuments(docs);
 }
 
-async function storeData(docChunks: Document<Record<string, any>>[]) {
-    const embeddings = new OpenAIEmbeddings();
-    const vectorstore = await MemoryVectorStore.fromDocuments(
-        docChunks,
-        embeddings
-      );
-    return vectorstore;
+async function storeData(docChunks: Document  []) {
+  const embeddings = new OpenAIEmbeddings();
+  const vectorstore = await MemoryVectorStore.fromDocuments(
+    docChunks,
+    embeddings
+  );
+  return vectorstore;
 }
