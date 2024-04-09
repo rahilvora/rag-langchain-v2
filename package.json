@@ -13,6 +13,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@langchain/anthropic": "^0.1.10",
     "@langchain/community": "^0.0.43",
     "@langchain/openai": "^0.0.25",
     "@next/bundle-analyzer": "^13.4.19",
@@ -22,6 +23,7 @@
     "@types/react-dom": "18.2.7",
     "ai": "^3.0.15",
     "autoprefixer": "10.4.14",
+    "cheerio": "1.0.0-rc.12",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "langchain": "^0.1.28",
