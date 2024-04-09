@@ -49,7 +49,7 @@ dependencies:
     specifier: 13.4.12
     version: 13.4.12(eslint@8.46.0)(typescript@5.1.6)
   langchain:
-    specifier: ^0.1.28
+    specifier: ^0.1.32
     version: 0.1.32(@supabase/supabase-js@2.42.0)(cheerio@1.0.0-rc.12)
   next:
     specifier: 14.0.1
