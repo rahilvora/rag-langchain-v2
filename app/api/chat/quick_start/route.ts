@@ -17,8 +17,8 @@ const formatMessage = (message: VercelChatMessage) => {
 };
 let retrievalChain: Runnable;
 const TEMPLATE = `
-    You are a helpful agent who is very polite and direct. 
-    All responses must be concise not too long and not too short. 
+    You are a helpful agent who is very polite. 
+    All responses must be elloborated and with examples if possible. 
     Please do not assume things if you have no knowledge about it
     
     <chat_history>
@@ -49,18 +49,7 @@ export async function GET(req: NextRequest) {
     combineDocsChain: documentChain,
     retriever: vectorstore.asRetriever(),
   });
-  // const stream = await retrievalChain
-  //   .pick("answer")
-  //   // .pipe(new HttpResponseOutputParser())
-  //   .stream({
-  //     chat_history:[],
-  //     input: 'What is langsmith?',
-  //   });
-
-  //   for await (const chunk of stream) {
-  //     console.log(chunk);
-  //   }
-  return NextResponse.json({ message: "Hello, world!" });
+  return NextResponse.json({ message: "Success!" });
 }
 
 /**
@@ -75,22 +64,6 @@ export async function POST(req: NextRequest) {
     const messages = body.messages ?? [];
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
-    const prompt = PromptTemplate.fromTemplate(TEMPLATE);
-    const model = new ChatOpenAI({
-      temperature: 0.8,
-      modelName: "gpt-3.5-turbo-1106",
-    });
-    const docs = await getDocs();
-    const splitDocs = await getSplitDocs(docs);
-    const vectorstore = await storeData(splitDocs);
-    const documentChain = await createStuffDocumentsChain({
-      llm: model,
-      prompt,
-    });
-    retrievalChain = await createRetrievalChain({
-      combineDocsChain: documentChain,
-      retriever: vectorstore.asRetriever(),
-    });
     const stream = await retrievalChain
     .pick("answer")
     .pipe(new HttpResponseOutputParser())
@@ -106,7 +79,7 @@ export async function POST(req: NextRequest) {
 
 async function getDocs() {
     const loader = new CheerioWebBaseLoader(
-        "https://docs.smith.langchain.com/user_guide"
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
     );
     return loader.load();
 }

@@ -48,7 +48,7 @@ export default function QuickStart() {
         
         <li className="text-l">
           <span className="ml-2">
-          🏞️ Try asking e.g. <code>Tell me something about different types of rock formations?</code> below!
+          This system is configured chat with JS MDN does. Click `Prime the system button` to ingest MDN docs. Once you see success message start chatting with it.
           </span>
         </li>
       </ul>
