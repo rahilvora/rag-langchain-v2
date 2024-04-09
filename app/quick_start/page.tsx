@@ -1,6 +1,8 @@
 import { ChatWindow } from "@/components/ChatWindow";
+import { PrimeSystemForm } from "@/components/PrimeSystemForm";
 
-export default function Home() {
+export default function QuickStart() {
+ 
   const InfoCard = (
     <div className="p-4 md:p-8 rounded bg-[#25252d] w-full max-h-[85%] overflow-hidden">
       <h1 className="text-3xl md:text-4xl mb-4">
@@ -29,14 +31,12 @@ export default function Home() {
           💻
           <span className="ml-2">
             You can find the prompt and model logic for this use-case in{" "}
-            <code>app/api/chat/route.ts</code>.
+            <code>app/api/chat/quick_start/route.ts</code>.
           </span>
         </li>
         <li>
-          🏴‍☠️
           <span className="ml-2">
-            By default, the bot is pretending to be a pirate, but you can change
-            the prompt to whatever you want!
+            It is a well behaved bot that is polite and direct.️
           </span>
         </li>
         <li className="hidden text-l md:block">
@@ -45,37 +45,26 @@ export default function Home() {
             The main frontend logic is found in <code>app/page.tsx</code>.
           </span>
         </li>
+        
         <li className="text-l">
-          🐙
           <span className="ml-2">
-            This template is open source - you can see the source code and
-            deploy your own version{" "}
-            <a
-              href="https://github.com/langchain-ai/langchain-nextjs-template"
-              target="_blank"
-            >
-              from the GitHub repo
-            </a>
-            !
-          </span>
-        </li>
-        <li className="text-l">
-          👇
-          <span className="ml-2">
-            Try asking e.g. <code>What is it like to be a pirate?</code> below!
+          🏞️ Try asking e.g. <code>Tell me something about different types of rock formations?</code> below!
           </span>
         </li>
       </ul>
     </div>
   );
   return (
-    <ChatWindow
-      endpoint="api/chat"
-      emoji="🏴‍☠️"
-      titleText="Patchy the Chatty Pirate"
-      placeholder="I'm an LLM pretending to be a pirate! Ask me about the pirate life!"
-      emptyStateComponent={InfoCard}
-      showModelOptions={true}
-    ></ChatWindow>
+    <>
+      <PrimeSystemForm />
+      <ChatWindow
+        endpoint="api/chat/quick_start"
+        emoji="🏴‍☠️"
+        titleText="Patchy the Chatty Pirate"
+        placeholder="Tell me something about different types of rock formations? 🏞️"
+        emptyStateComponent={InfoCard}
+        showModelOptions={true}
+      ></ChatWindow>
+    </>
   );
 }

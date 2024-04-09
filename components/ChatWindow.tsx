@@ -20,11 +20,14 @@ export function ChatWindow(props: {
   emoji?: string;
   showIngestForm?: boolean,
   showIntermediateStepsToggle?: boolean
+  showModelOptions?: boolean
 }) {
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const { endpoint, emptyStateComponent, placeholder, titleText = "An LLM", showIngestForm, showIntermediateStepsToggle, emoji } = props;
+  const { endpoint, emptyStateComponent, placeholder, titleText = "An LLM", showIngestForm, showIntermediateStepsToggle, emoji, showModelOptions } = props;
 
+  const [chatGPT3Model, setChatGPT3Model] = useState(false);
+  const [claudeModel, setClaudeModel] = useState(false);
   const [showIntermediateSteps, setShowIntermediateSteps] = useState(false);
   const [intermediateStepsLoading, setIntermediateStepsLoading] = useState(false);
   const ingestForm = showIngestForm && <UploadDocumentsForm></UploadDocumentsForm>;
@@ -33,6 +36,19 @@ export function ChatWindow(props: {
       <input type="checkbox" id="show_intermediate_steps" name="show_intermediate_steps" checked={showIntermediateSteps} onChange={(e) => setShowIntermediateSteps(e.target.checked)}></input>
       <label htmlFor="show_intermediate_steps"> Show intermediate steps</label>
     </div>
+  );
+
+  const modelOptions = showModelOptions && (
+    <>
+      <div>
+        <input type="checkbox" id="chatgpt_open_ai" name="chatgpt_open_ai" checked={chatGPT3Model} onChange={(e) => setChatGPT3Model(e.target.checked)}></input>
+        <label htmlFor="chatgpt_open_ai"> ChatGPT3.5 - OpenAI </label>
+      </div>
+      <div>
+        <input type="checkbox" id="claude_anthropic" name="claude_anthropic" checked={claudeModel} onChange={(e) => setClaudeModel(e.target.checked)}></input>
+        <label htmlFor="claude_anthropic"> Claude - Anthropic </label>
+      </div>
+    </>
   );
 
   const [sourcesForMessages, setSourcesForMessages] = useState<Record<string, any>>({});
@@ -131,6 +147,9 @@ export function ChatWindow(props: {
       <form onSubmit={sendMessage} className="flex w-full flex-col">
         <div className="flex">
           {intemediateStepsToggle}
+        </div>
+        <div className="flex">
+          {modelOptions}
         </div>
         <div className="flex w-full mt-4">
           <input
