@@ -126,8 +126,7 @@ export function ChatWindow(props: {
           [...messages]
             .reverse()
             .map((m, i) => {
-              const sourceKey = (messages.length - 1 - i).toString();
-              return (m.role === "system" ? <IntermediateStep key={m.id} message={m}></IntermediateStep> : <ChatMessageBubble key={m.id} message={m} aiEmoji={emoji} sources={sourcesForMessages[sourceKey]}></ChatMessageBubble>)
+              return (<ChatMessageBubble key={m.id} message={m} aiEmoji={emoji}></ChatMessageBubble>);
             })
         ) : (
           ""
