@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
       chat_history: formattedPreviousMessages.join("\n"),
       input: currentMessageContent,
     });
-    return new StreamingTextResponse(stream, {
+    return new NextResponse(stream, {
       headers: {
         'Content-Type': 'text/event-stream',
         'X-Content-Type-Options': 'nosniff'
