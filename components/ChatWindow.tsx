@@ -51,11 +51,11 @@ export function ChatWindow(props: {
     </>
   );
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading: chatEndpointIsLoading } =
+  const { messages, input, setInput, handleInputChange, handleSubmit, isLoading: chatEndpointIsLoading, setMessages } =
     useChat({
       api: endpoint,
       onError: (e) => {
-        toast(JSON.stringify(e), {
+        toast(e.message, {
           theme: "dark"
         });
       }
@@ -72,7 +72,44 @@ export function ChatWindow(props: {
     if (chatEndpointIsLoading ?? intermediateStepsLoading) {
       return;
     }
-    handleSubmit(e);
+    if (!showIntermediateSteps) {
+      handleSubmit(e);
+    // Some extra work to show intermediate steps properly
+    } else {
+      setIntermediateStepsLoading(true);
+      setInput("");
+      const messagesWithUserReply = messages.concat({ id: messages.length.toString(), content: input, role: "user" });
+      setMessages(messagesWithUserReply);
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: JSON.stringify({
+          messages: messagesWithUserReply,
+          show_intermediate_steps: true
+        })
+      });
+      const json = await response.json();
+      setIntermediateStepsLoading(false);
+      if (response.status === 200) {
+        // Represent intermediate steps as system messages for display purposes
+        const intermediateStepMessages = (json.intermediate_steps ?? []).map((intermediateStep: AgentStep, i: number) => {
+          return {id: (messagesWithUserReply.length + i).toString(), content: JSON.stringify(intermediateStep), role: "system"};
+        });
+        const newMessages = messagesWithUserReply;
+        for (const message of intermediateStepMessages) {
+          newMessages.push(message);
+          setMessages([...newMessages]);
+          await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
+        }
+        setMessages([...newMessages, { id: (newMessages.length + intermediateStepMessages.length).toString(), content: json.output, role: "assistant" }]);
+      } else {
+        if (json.error) {
+          toast(json.error, {
+            theme: "dark"
+          });
+          throw new Error(JSON.stringify(json));
+        }
+      }
+    }
   }
 
   return (
