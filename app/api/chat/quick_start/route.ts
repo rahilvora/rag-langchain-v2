@@ -73,7 +73,12 @@ export async function POST(req: NextRequest) {
       chat_history: formattedPreviousMessages.join("\n"),
       input: currentMessageContent,
     });
-    return new StreamingTextResponse(stream);
+    return new StreamingTextResponse(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'X-Content-Type-Options': 'nosniff'
+      }
+    });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });
   }
