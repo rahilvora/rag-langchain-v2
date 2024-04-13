@@ -59,9 +59,9 @@ export default function QuickStart() {
       <PrimeSystemForm />
       <ChatWindow
         endpoint="api/chat/quick_start"
-        emoji="🦜"
-        titleText="Talk to MDN docs 📚"
-        placeholder="Tell me something about closures in JavaScript?"
+        emoji="🏴‍☠️"
+        titleText="Patchy the Chatty Pirate"
+        placeholder="Tell me something about different types of rock formations? 🏞️"
         emptyStateComponent={InfoCard}
         showModelOptions={true}
       ></ChatWindow>

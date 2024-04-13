@@ -51,6 +51,8 @@ export function ChatWindow(props: {
     </>
   );
 
+  const [sourcesForMessages, setSourcesForMessages] = useState<Record<string, any>>({});
+
   const { messages, input, setInput, handleInputChange, handleSubmit, isLoading: chatEndpointIsLoading, setMessages } =
     useChat({
       api: endpoint,
@@ -106,7 +108,7 @@ export function ChatWindow(props: {
           toast(json.error, {
             theme: "dark"
           });
-          throw new Error(JSON.stringify(json));
+          throw new Error(json.error);
         }
       }
     }
@@ -123,7 +125,7 @@ export function ChatWindow(props: {
         {messages.length > 0 ? (
           [...messages]
             .reverse()
-            .map((m) => {
+            .map((m, i) => {
               return (<ChatMessageBubble key={m.id} message={m} aiEmoji={emoji}></ChatMessageBubble>);
             })
         ) : (
