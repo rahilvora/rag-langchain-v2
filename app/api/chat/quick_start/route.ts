@@ -11,7 +11,7 @@ import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createRetrievalChain } from "langchain/chains/retrieval";
 import { Runnable } from "@langchain/core/runnables";
 import { Document } from "langchain/document";
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const dynamic = 'force-dynamic';
 
 const formatMessage = (message: VercelChatMessage) => {
