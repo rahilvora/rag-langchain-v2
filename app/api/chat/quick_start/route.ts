@@ -11,7 +11,7 @@ import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createRetrievalChain } from "langchain/chains/retrieval";
 import { Runnable } from "@langchain/core/runnables";
 import { Document } from "langchain/document";
-export const runtime = "nodejs";
+export const runtime = "edge";
 export const dynamic = 'force-dynamic';
 
 const formatMessage = (message: VercelChatMessage) => {
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
     const stream = await retrievalChain
     .pick("answer")
     .pipe(new HttpResponseOutputParser())
-    .stream({
+    .invoke({
       chat_history: formattedPreviousMessages.join("\n"),
       input: currentMessageContent,
     });
