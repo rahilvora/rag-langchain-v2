@@ -83,7 +83,7 @@ export function ChatWindow(props: {
         className="flex flex-col-reverse w-full mb-4 overflow-auto transition-[flex-grow] ease-in-out"
         ref={messageContainerRef}
       >
-        {/* {messages.length > 0 ? (
+        {messages.length > 0 ? (
           [...messages]
             .reverse()
             .map((m) => {
@@ -91,8 +91,7 @@ export function ChatWindow(props: {
             })
         ) : (
           ""
-        )} */}
-        {JSON.stringify([...messages])}
+        )}
       </div>
 
       {messages.length === 0 && ingestForm}
