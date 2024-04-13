@@ -38,6 +38,7 @@ export async function GET(req: NextRequest) {
   const model = new ChatOpenAI({
     temperature: 0.8,
     modelName: "gpt-3.5-turbo-1106",
+    maxRetries: 5,
   });
   const docs = await getDocs();
   const splitDocs = await getSplitDocs(docs);
@@ -72,7 +73,11 @@ export async function POST(req: NextRequest) {
       chat_history: formattedPreviousMessages.join("\n"),
       input: currentMessageContent,
     });
-    return new StreamingTextResponse(stream);
+    return new StreamingTextResponse(stream, {
+      headers: {
+        "Content-Type": "text/event-stream",
+      },
+    });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });
   }
