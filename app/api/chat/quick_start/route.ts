@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
+import { StreamingTextResponse } from "ai";
 import { ChatOpenAI } from "@langchain/openai";
-import { PromptTemplate } from "@langchain/core/prompts";
+import { ChatPromptTemplate, PromptTemplate } from "@langchain/core/prompts";
 import { HttpResponseOutputParser } from "langchain/output_parsers";
 import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 import { OpenAIEmbeddings } from "@langchain/openai";
@@ -9,32 +9,26 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createRetrievalChain } from "langchain/chains/retrieval";
+import { MessagesPlaceholder } from "@langchain/core/prompts";
 import { Runnable } from "@langchain/core/runnables";
 import { Document } from "langchain/document";
+import { ChatMessage } from "langchain/schema";
 export const runtime = "edge";
 
-const formatMessage = (message: VercelChatMessage) => {
-  return `${message.role}: ${message.content}`;
+const formatMessage = (message: ChatMessage) => {
+  return new ChatMessage({content: message.content, role: message.role})
 };
-let retrievalChain: Runnable;
-const TEMPLATE = `
-    You are a helpful agent who is very polite. 
-    All responses must be elloborated and with examples if possible. 
-    Please do not assume things if you have no knowledge about it
-    
-    <chat_history>
-      {chat_history}
-    </chat_history>
-
-    <context>
-      {context}
-    </context>
-    User: {input}
-    AI:
-`;
+let conversationalRetrievalChain: Runnable;
 
 export async function GET(req: NextRequest) {
-  const prompt = PromptTemplate.fromTemplate(TEMPLATE);
+  const historyAwareRetrievalPrompt = ChatPromptTemplate.fromMessages([
+    [
+      "system", `You are a helpful agent who is very polite. All responses must be elloborated and with examples if possible. Please do not assume things if you have no knowledge about it.
+      Given the above conversation, generate a search query to look up to get information relevant to the conversation:\n\n{context}`,
+    ],
+    new MessagesPlaceholder("chat_history"),
+    ["user", "{input}"],
+  ]);
   const model = new ChatOpenAI({
     temperature: 0.8,
     modelName: "gpt-3.5-turbo-1106",
@@ -42,12 +36,13 @@ export async function GET(req: NextRequest) {
   const docs = await getDocs();
   const splitDocs = await getSplitDocs(docs);
   const vectorstore = await storeData(splitDocs);
-  const documentChain = await createStuffDocumentsChain({
+  const historyAwareCombineDocsChain = await createStuffDocumentsChain({
     llm: model,
-    prompt,
+    prompt:historyAwareRetrievalPrompt,
   });
-  retrievalChain = await createRetrievalChain({
-    combineDocsChain: documentChain,
+
+  conversationalRetrievalChain = await createRetrievalChain({
+    combineDocsChain: historyAwareCombineDocsChain,
     retriever: vectorstore.asRetriever(),
   });
   return NextResponse.json({ message: "Success!" });
@@ -65,11 +60,11 @@ export async function POST(req: NextRequest) {
     const messages = body.messages ?? [];
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
-    const stream = await retrievalChain
+    const stream = await conversationalRetrievalChain
     .pick("answer")
     .pipe(new HttpResponseOutputParser())
     .stream({
-      chat_history: formattedPreviousMessages.join("\n"),
+      chat_history: formattedPreviousMessages,
       input: currentMessageContent,
     });
     return new StreamingTextResponse(stream);
