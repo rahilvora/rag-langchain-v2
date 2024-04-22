@@ -1,5 +1,4 @@
 import { ChatWindow } from "@/components/ChatWindow";
-import { PrimeSystemForm } from "@/components/IngestURLForm";
 
 export default function QuickStart() {
  
