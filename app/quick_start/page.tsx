@@ -1,5 +1,5 @@
 import { ChatWindow } from "@/components/ChatWindow";
-import { PrimeSystemForm } from "@/components/PrimeSystemForm";
+import { PrimeSystemForm } from "@/components/IngestURLForm";
 
 export default function QuickStart() {
  
@@ -56,14 +56,14 @@ export default function QuickStart() {
   );
   return (
     <>
-      <PrimeSystemForm />
       <ChatWindow
         endpoint="api/chat/quick_start"
         emoji="🏴‍☠️"
-        titleText="Patchy the Chatty Pirate"
+        titleText="RAG with URLs"
         placeholder="Tell me something about different types of rock formations? 🏞️"
         emptyStateComponent={InfoCard}
         showModelOptions={true}
+        showURLIngestForm={true}
       ></ChatWindow>
     </>
   );
