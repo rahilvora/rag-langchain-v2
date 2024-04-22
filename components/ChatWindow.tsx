@@ -11,6 +11,7 @@ import type { AgentStep } from "langchain/schema";
 import { ChatMessageBubble } from "@/components/ChatMessageBubble";
 import { UploadDocumentsForm } from "@/components/UploadDocumentsForm";
 import { IntermediateStep } from "./IntermediateStep";
+import { IngestURLForm } from '@/components/IngestURLForm';
 
 export function ChatWindow(props: {
   endpoint: string,
@@ -19,18 +20,21 @@ export function ChatWindow(props: {
   titleText?: string,
   emoji?: string;
   showIngestForm?: boolean,
+  showURLIngestForm?:boolean,
   showIntermediateStepsToggle?: boolean
   showModelOptions?: boolean
 }) {
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const { endpoint, emptyStateComponent, placeholder, titleText = "An LLM", showIngestForm, showIntermediateStepsToggle, emoji, showModelOptions } = props;
+  const { endpoint, emptyStateComponent, placeholder, titleText = "An LLM", showIngestForm, showIntermediateStepsToggle, emoji, showModelOptions, showURLIngestForm } = props;
 
   const [chatGPT3Model, setChatGPT3Model] = useState(false);
   const [claudeModel, setClaudeModel] = useState(false);
+  const [mistralModel, setMistralModel] = useState(false);
   const [showIntermediateSteps, setShowIntermediateSteps] = useState(false);
   const [intermediateStepsLoading, setIntermediateStepsLoading] = useState(false);
   const ingestForm = showIngestForm && <UploadDocumentsForm></UploadDocumentsForm>;
+  const urlIngestForm = showURLIngestForm && <IngestURLForm></IngestURLForm>;
   const intemediateStepsToggle = showIntermediateStepsToggle && (
     <div>
       <input type="checkbox" id="show_intermediate_steps" name="show_intermediate_steps" checked={showIntermediateSteps} onChange={(e) => setShowIntermediateSteps(e.target.checked)}></input>
@@ -47,6 +51,10 @@ export function ChatWindow(props: {
       <div>
         <input type="checkbox" id="claude_anthropic" name="claude_anthropic" checked={claudeModel} onChange={(e) => setClaudeModel(e.target.checked)}></input>
         <label htmlFor="claude_anthropic"> Claude - Anthropic </label>
+      </div>
+      <div>
+        <input type="checkbox" id="mistral_ai" name="mistral_ai" checked={mistralModel} onChange={(e) => setMistralModel(e.target.checked)}></input>
+        <label htmlFor="mistral_ai"> Mistral AI </label>
       </div>
     </>
   );
@@ -65,6 +73,7 @@ export function ChatWindow(props: {
 
   async function sendMessage(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    console.log(`${mistralModel}, ${claudeModel}, ${chatGPT3Model}`);
     if (messageContainerRef.current) {
       messageContainerRef.current.classList.add("grow");
     }
@@ -135,7 +144,7 @@ export function ChatWindow(props: {
       </div>
 
       {messages.length === 0 && ingestForm}
-
+      {urlIngestForm}
       <form onSubmit={sendMessage} className="flex w-full flex-col">
         <div className="flex">
           {intemediateStepsToggle}

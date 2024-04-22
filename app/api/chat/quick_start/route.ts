@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { StreamingTextResponse } from "ai";
 import { ChatOpenAI } from "@langchain/openai";
-import { ChatPromptTemplate, PromptTemplate } from "@langchain/core/prompts";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { HttpResponseOutputParser } from "langchain/output_parsers";
 import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 import { OpenAIEmbeddings } from "@langchain/openai";
@@ -11,8 +11,8 @@ import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createRetrievalChain } from "langchain/chains/retrieval";
 import { MessagesPlaceholder } from "@langchain/core/prompts";
 import { Runnable } from "@langchain/core/runnables";
-import { Document } from "langchain/document";
-import { ChatMessage } from "langchain/schema";
+import { Document } from "@langchain/core/documents";
+import { ChatMessage } from "@langchain/core/messages";
 export const runtime = "edge";
 
 const formatMessage = (message: ChatMessage) => {
@@ -21,6 +21,7 @@ const formatMessage = (message: ChatMessage) => {
 let conversationalRetrievalChain: Runnable;
 
 export async function GET(req: NextRequest) {
+  console.log("Initializing...")
   const historyAwareRetrievalPrompt = ChatPromptTemplate.fromMessages([
     [
       "system", `You are a helpful agent who is very polite. All responses must be elloborated and with examples if possible. Please do not assume things if you have no knowledge about it.
@@ -79,6 +80,7 @@ async function getDocs() {
     );
     return loader.load();
 }
+
 async function getSplitDocs(docs: Document[]) {
   const splitter = new RecursiveCharacterTextSplitter();
   return splitter.splitDocuments(docs);
