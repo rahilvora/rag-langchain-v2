@@ -8,7 +8,7 @@ export function IngestURLForm() {
   const [url, setUrl] = useState('');
 
   async function uploadURL(e: FormEvent<HTMLFormElement>) {
-    const urnInputElm = (e.target as HTMLFormElement).getElementsByClassName("doc-site-url-input")[0];
+    const urnInputElm = (e.target as HTMLFormElement).getElementsByClassName("doc-site-url-input")[0] as HTMLInputElement;
     setUrl(urnInputElm.value);
     e.preventDefault();
     setUpLoaded(false);
