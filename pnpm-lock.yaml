@@ -18,6 +18,9 @@ dependencies:
   '@langchain/openai':
     specifier: ^0.0.25
     version: 0.0.25
+  '@langchain/pinecone':
+    specifier: ^0.0.4
+    version: 0.0.4
   '@pinecone-database/pinecone':
     specifier: ^2.2.0
     version: 2.2.0
@@ -569,6 +572,16 @@ packages:
       zod-to-json-schema: 3.22.5(zod@3.22.4)
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /@langchain/pinecone@0.0.4:
+    resolution: {integrity: sha512-9Rme771vHbRKXHy0IxOFFUyYtJfL+I1LgleF1cSkb2ZxgtOwN7uvh0Cp23WrCzEh8DHVEaRYPSbBC4W3YfqwfA==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@langchain/core': 0.1.52
+      '@pinecone-database/pinecone': 2.2.0
+      flat: 5.0.2
+      uuid: 9.0.1
     dev: false
 
   /@next/env@14.2.1:
