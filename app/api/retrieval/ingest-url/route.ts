@@ -9,18 +9,10 @@ import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createRetrievalChain } from "langchain/chains/retrieval";
 import { MessagesPlaceholder } from "@langchain/core/prompts";
 import { Document } from "@langchain/core/documents";
+import { PineconeStore } from "@langchain/pinecone";
+import pineconeIndex from "@/utils/pinecone/db_connection";
 export const runtime = "edge";
 
-// Before running, follow set-up instructions at
-// https://js.langchain.com/docs/modules/indexes/vector_stores/integrations/supabase
-
-/**
- * This handler takes input text, splits it into chunks, and embeds those chunks
- * into a vector store for later retrieval. See the following docs for more information:
- *
- * https://js.langchain.com/docs/modules/data_connection/document_transformers/text_splitters/recursive_text_splitter
- * https://js.langchain.com/docs/modules/data_connection/vectorstores/integrations/supabase
- */
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const url = body.url;
@@ -70,9 +62,14 @@ async function getSplitDocs(docs: Document[]) {
 
 async function storeData(docChunks: Document  []) {
   const embeddings = new OpenAIEmbeddings();
-  const vectorstore = await MemoryVectorStore.fromDocuments(
-    docChunks,
-    embeddings
-  );
+  const vectorstore = await PineconeStore.fromDocuments(docChunks, embeddings, {
+    pineconeIndex,
+    maxConcurrency: 5
+  });
+  // Uncomment the following line to use MemoryVectorStore instead of PineconeStore
+  // const vectorstore = await MemoryVectorStore.fromDocuments(
+  //   docChunks,
+  //   embeddings
+  // );
   return vectorstore;
 }
