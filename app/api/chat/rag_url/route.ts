@@ -13,6 +13,7 @@ import { MessagesPlaceholder } from "@langchain/core/prompts";
 import { Runnable } from "@langchain/core/runnables";
 import { Document } from "@langchain/core/documents";
 import { ChatMessage } from "@langchain/core/messages";
+
 export const runtime = "edge";
 
 const formatMessage = (message: ChatMessage) => {
