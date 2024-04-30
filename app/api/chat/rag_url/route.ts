@@ -21,35 +21,6 @@ const formatMessage = (message: ChatMessage) => {
 };
 let conversationalRetrievalChain: Runnable;
 
-export async function GET(req: NextRequest) {
-  console.log("Initializing...")
-  const historyAwareRetrievalPrompt = ChatPromptTemplate.fromMessages([
-    [
-      "system", `You are a helpful agent who is very polite. All responses must be elloborated and with examples if possible. Please do not assume things if you have no knowledge about it.
-      Given the above conversation, generate a search query to look up to get information relevant to the conversation:\n\n{context}`,
-    ],
-    new MessagesPlaceholder("chat_history"),
-    ["user", "{input}"],
-  ]);
-  const model = new ChatOpenAI({
-    temperature: 0.8,
-    modelName: "gpt-3.5-turbo-1106",
-  });
-  const docs = await getDocs();
-  const splitDocs = await getSplitDocs(docs);
-  const vectorstore = await storeData(splitDocs);
-  const historyAwareCombineDocsChain = await createStuffDocumentsChain({
-    llm: model,
-    prompt:historyAwareRetrievalPrompt,
-  });
-
-  conversationalRetrievalChain = await createRetrievalChain({
-    combineDocsChain: historyAwareCombineDocsChain,
-    retriever: vectorstore.asRetriever(),
-  });
-  return NextResponse.json({ message: "Success!" });
-}
-
 /**
  * This handler initializes and calls a simple chain with a prompt,
  * chat model, and output parser. See the docs for more information:
@@ -73,25 +44,4 @@ export async function POST(req: NextRequest) {
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });
   }
-}
-
-async function getDocs() {
-    const loader = new CheerioWebBaseLoader(
-        "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
-    );
-    return loader.load();
-}
-
-async function getSplitDocs(docs: Document[]) {
-  const splitter = new RecursiveCharacterTextSplitter();
-  return splitter.splitDocuments(docs);
-}
-
-async function storeData(docChunks: Document  []) {
-  const embeddings = new OpenAIEmbeddings();
-  const vectorstore = await MemoryVectorStore.fromDocuments(
-    docChunks,
-    embeddings
-  );
-  return vectorstore;
 }
