@@ -2,15 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
-import { OpenAIEmbeddings } from "@langchain/openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createRetrievalChain } from "langchain/chains/retrieval";
 import { MessagesPlaceholder } from "@langchain/core/prompts";
 import { Document } from "@langchain/core/documents";
-import { PineconeStore } from "@langchain/pinecone";
-import pineconeIndex from "@/utils/pinecone/db_connection";
+import { VectorStore } from "../../../database/vector_store"
 export const runtime = "edge";
 
 export async function POST(req: NextRequest) {
@@ -33,7 +31,7 @@ export async function POST(req: NextRequest) {
   try {
     const docs = await getDocs(url);
     const splitDocs = await getSplitDocs(docs);
-    const vectorstore = await storeData(splitDocs);
+    const vectorstore = await createVectorStore(url, splitDocs);
     const historyAwareCombineDocsChain = await createStuffDocumentsChain({
       llm: model,
       prompt:historyAwareRetrievalPrompt,
@@ -60,16 +58,6 @@ async function getSplitDocs(docs: Document[]) {
   return splitter.splitDocuments(docs);
 }
 
-async function storeData(docChunks: Document  []) {
-  const embeddings = new OpenAIEmbeddings();
-  const vectorstore = await PineconeStore.fromDocuments(docChunks, embeddings, {
-    pineconeIndex,
-    maxConcurrency: 5
-  });
-  // Uncomment the following line to use MemoryVectorStore instead of PineconeStore
-  // const vectorstore = await MemoryVectorStore.fromDocuments(
-  //   docChunks,
-  //   embeddings
-  // );
-  return vectorstore;
+async function createVectorStore(index: string, docChunks: Document []) {
+  return await new VectorStore(index).createVectorStore(docChunks);
 }
