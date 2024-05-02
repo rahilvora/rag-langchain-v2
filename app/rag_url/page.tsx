@@ -59,7 +59,7 @@ export default function QuickStart() {
         endpoint="api/chat/rag_url"
         emoji="🏴‍☠️"
         titleText="RAG with URLs"
-        placeholder="Tell me something about different types of rock formations? 🏞️"
+        placeholder="As questions about the content of the upload URL?"
         emptyStateComponent={InfoCard}
         showModelOptions={true}
         showURLIngestForm={true}
