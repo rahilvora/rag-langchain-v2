@@ -56,7 +56,7 @@ export default function QuickStart() {
   return (
     <>
       <ChatWindow
-        endpoint="api/chat/quick_start"
+        endpoint="api/chat/rag_url"
         emoji="🏴‍☠️"
         titleText="RAG with URLs"
         placeholder="Tell me something about different types of rock formations? 🏞️"
@@ -66,5 +66,4 @@ export default function QuickStart() {
       ></ChatWindow>
     </>
   );
-  // test commit
 }
