@@ -2,13 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { StreamingTextResponse } from "ai";
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { HttpResponseOutputParser } from "langchain/output_parsers";
-import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
-import { createRetrievalChain } from "langchain/chains/retrieval";
 import { MessagesPlaceholder } from "@langchain/core/prompts";
-import { Runnable } from "@langchain/core/runnables";
 import { ChatMessage } from "@langchain/core/messages";
-import { VectorStore } from "@/database/vector_store"
+import { createOpenAIFunctionsAgent } from "langchain/agents";
+import { AgentExecutor } from "langchain/agents";
+import RetrieverTool from "@/tools/retriever_tool";
+import SearchTool from "@/tools/search_tool";
 
 export const runtime = "edge";
 
@@ -28,10 +27,8 @@ export async function POST(req: NextRequest) {
     const messages = body.messages ?? [];
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
-    const chain = await getRetrivalChain();
-    const stream = await chain
-    .pick("answer")
-    .pipe(new HttpResponseOutputParser())
+    const agentExecutor = await getAgent();
+    const stream = await agentExecutor
     .stream({
       chat_history: formattedPreviousMessages,
       input: currentMessageContent,
@@ -42,13 +39,14 @@ export async function POST(req: NextRequest) {
   }
 }
 
-async function getRetrivalChain(): Promise<Runnable> {
+async function getAgent() {
   const historyAwareRetrievalPrompt = ChatPromptTemplate.fromMessages([
     [
       "system", `You are a helpful agent who is very polite. All responses must be elloborated and with examples if possible. Please do not assume things if you have no knowledge about it.
-      Given the above conversation, generate a search query to look up to get information relevant to the conversation:\n\n{context}`,
+      Given the above conversation, generate a search query to look up to get information relevant to the conversation.`,
     ],
     new MessagesPlaceholder("chat_history"),
+    new MessagesPlaceholder("agent_scratchpad"),
     ["user", "{input}"],
   ]);
 
@@ -57,15 +55,21 @@ async function getRetrivalChain(): Promise<Runnable> {
     modelName: "gpt-3.5-turbo-1106",
   });
 
-  const historyAwareCombineDocsChain = await createStuffDocumentsChain({
+  const tools =  [
+    await new RetrieverTool().getRetrieverTool(),
+    new SearchTool().getSearchTool()
+  ];
+
+  const agent = await createOpenAIFunctionsAgent({
     llm: model,
-    prompt:historyAwareRetrievalPrompt,
+    tools,
+    prompt: historyAwareRetrievalPrompt,
+    streamRunnable: true,
   });
 
-  const vectorStore = await new VectorStore('').getVectorStore();
-
-  return createRetrievalChain({
-    combineDocsChain: historyAwareCombineDocsChain,
-    retriever: vectorStore.asRetriever(),
+  const agentExecutor = new AgentExecutor({
+    agent,
+    tools,
   });
+  return agentExecutor;
 }
