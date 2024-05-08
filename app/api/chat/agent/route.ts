@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { StreamingTextResponse } from "ai";
+import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { MessagesPlaceholder } from "@langchain/core/prompts";
-import { ChatMessage } from "@langchain/core/messages";
+import { AIMessage, HumanMessage, ChatMessage } from "@langchain/core/messages";
+import { Calculator } from "@langchain/community/tools/calculator";
 import { createOpenAIFunctionsAgent } from "langchain/agents";
 import { AgentExecutor } from "langchain/agents";
 import RetrieverTool from "@/tools/retriever_tool";
@@ -11,8 +12,14 @@ import SearchTool from "@/tools/search_tool";
 
 export const runtime = "edge";
 
-const formatMessage = (message: ChatMessage) => {
-  return new ChatMessage({content: message.content, role: message.role})
+const formatMessage = (message: VercelChatMessage) => {
+  if (message.role === "user") {
+    return new HumanMessage(message.content);
+  } else if (message.role === "assistant") {
+    return new AIMessage(message.content);
+  } else {
+    return new ChatMessage(message.content, message.role);
+  }
 };
 
 /**
@@ -28,12 +35,15 @@ export async function POST(req: NextRequest) {
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
     const agentExecutor = await getAgent();
-    const stream = await agentExecutor
-    .stream({
-      chat_history: formattedPreviousMessages,
+    // TODO: Figure out how to Stream Agent Response instead of waiting for the response
+    const result = await agentExecutor.invoke({
       input: currentMessageContent,
+      chat_history: formattedPreviousMessages,
     });
-    return new StreamingTextResponse(stream);
+    return NextResponse.json(
+      { output: result.output, intermediate_steps: result.intermediateSteps },
+      { status: 200 },
+    );
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });
   }
@@ -56,6 +66,7 @@ async function getAgent() {
   });
 
   const tools =  [
+    new Calculator(),
     await new RetrieverTool().getRetrieverTool(),
     new SearchTool().getSearchTool()
   ];
