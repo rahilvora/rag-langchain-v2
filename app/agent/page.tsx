@@ -81,7 +81,7 @@ export default function AgentsPage() {
       endpoint="api/chat/agent"
       emptyStateComponent={InfoCard}
       placeholder="I'm a conversational agent! Ask me about the current weather in Honolulu!"
-      titleText="Chat with Agent which can RAG over URLs or Search Web"
+      titleText="Chat with Agent which can RAG over URLs, Search Web and do Math Calculations"
       showIntermediateStepsToggle={true}
       showURLIngestForm={true}
     ></ChatWindow>
