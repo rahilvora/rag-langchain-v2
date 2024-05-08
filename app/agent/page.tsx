@@ -1,5 +1,6 @@
 import { ChatWindow } from "@/components/ChatWindow";
 
+
 export default function AgentsPage() {
   const InfoCard = (
     <div className="p-4 md:p-8 rounded bg-[#25252d] w-full max-h-[85%] overflow-hidden">
@@ -77,12 +78,12 @@ export default function AgentsPage() {
   );
   return (
     <ChatWindow
-      endpoint="api/chat/agents"
+      endpoint="api/chat/agent"
       emptyStateComponent={InfoCard}
-      placeholder="Squawk! I'm a conversational agent! Ask me about the current weather in Honolulu!"
-      titleText="Polly the Agentic Parrot"
-      emoji="🦜"
+      placeholder="I'm a conversational agent! Ask me about the current weather in Honolulu!"
+      titleText="Chat with Agent which can RAG over URLs or Search Web"
       showIntermediateStepsToggle={true}
+      showURLIngestForm={true}
     ></ChatWindow>
   );
 }

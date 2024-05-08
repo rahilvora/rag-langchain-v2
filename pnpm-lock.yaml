@@ -5,16 +5,16 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@langchain/core': 0.1.52
+  '@langchain/core': 0.1.61
   md5@^2.3.0: 2.1.0
 
 dependencies:
   '@langchain/community':
-    specifier: ^0.0.43
-    version: 0.0.43(@pinecone-database/pinecone@2.2.0)
+    specifier: ^0.0.53
+    version: 0.0.53(@pinecone-database/pinecone@2.2.0)
   '@langchain/core':
-    specifier: 0.1.52
-    version: 0.1.52
+    specifier: 0.1.61
+    version: 0.1.61
   '@langchain/openai':
     specifier: ^0.0.25
     version: 0.0.25
@@ -253,8 +253,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: false
 
-  /@langchain/community@0.0.43(@pinecone-database/pinecone@2.2.0):
-    resolution: {integrity: sha512-60TjV3knGGOPHfbJxLpuwARr8oA0r6Txm8wTFvFx+TjRUrloyBUcWSbJIdm62gAwBJDEHmdjjyWOOzU+eewcuA==}
+  /@langchain/community@0.0.53(@pinecone-database/pinecone@2.2.0):
+    resolution: {integrity: sha512-iFqZPt4MRssGYsQoKSXWJQaYTZCC7WNuilp2JCCs3wKmJK3l6mR0eV+PDrnT+TaDHUVxt/b0rwgM0sOiy0j2jA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@aws-crypto/sha256-js': ^5.0.0
@@ -269,7 +269,7 @@ packages:
       '@azure/search-documents': ^12.0.0
       '@clickhouse/client': ^0.2.5
       '@cloudflare/ai': '*'
-      '@datastax/astra-db-ts': ^0.1.4
+      '@datastax/astra-db-ts': ^1.0.0
       '@elastic/elasticsearch': ^8.4.0
       '@getmetal/metal-sdk': '*'
       '@getzep/zep-js': ^0.9.0
@@ -279,11 +279,12 @@ packages:
       '@gradientai/nodejs-sdk': ^1.2.0
       '@huggingface/inference': ^2.6.4
       '@mozilla/readability': '*'
+      '@neondatabase/serverless': '*'
       '@opensearch-project/opensearch': '*'
       '@pinecone-database/pinecone': '*'
       '@planetscale/database': ^1.8.0
       '@premai/prem-sdk': ^0.3.25
-      '@qdrant/js-client-rest': ^1.2.0
+      '@qdrant/js-client-rest': ^1.8.2
       '@raycast/api': ^1.55.2
       '@rockset/client': ^0.9.1
       '@smithy/eventstream-codec': ^2.0.5
@@ -296,7 +297,7 @@ packages:
       '@tensorflow/tfjs-converter': '*'
       '@tensorflow/tfjs-core': '*'
       '@upstash/redis': ^1.20.6
-      '@upstash/vector': ^1.0.2
+      '@upstash/vector': ^1.0.7
       '@vercel/kv': ^0.2.3
       '@vercel/postgres': ^0.5.0
       '@writerai/writer-sdk': ^0.40.2
@@ -315,11 +316,12 @@ packages:
       couchbase: ^4.3.0
       discord.js: ^14.14.1
       dria: ^0.0.3
+      duck-duck-scrape: ^2.2.5
       faiss-node: ^0.5.1
       firebase-admin: ^11.9.0 || ^12.0.0
       google-auth-library: ^8.9.0
       googleapis: ^126.0.1
-      hnswlib-node: ^1.4.2
+      hnswlib-node: ^3.0.0
       html-to-text: ^9.0.5
       interface-datastore: ^8.2.11
       ioredis: ^5.3.2
@@ -391,6 +393,8 @@ packages:
       '@huggingface/inference':
         optional: true
       '@mozilla/readability':
+        optional: true
+      '@neondatabase/serverless':
         optional: true
       '@opensearch-project/opensearch':
         optional: true
@@ -464,6 +468,8 @@ packages:
         optional: true
       dria:
         optional: true
+      duck-duck-scrape:
+        optional: true
       faiss-node:
         optional: true
       firebase-admin:
@@ -529,20 +535,21 @@ packages:
       ws:
         optional: true
     dependencies:
-      '@langchain/core': 0.1.52
-      '@langchain/openai': 0.0.25
+      '@langchain/core': 0.1.61
+      '@langchain/openai': 0.0.28
       '@pinecone-database/pinecone': 2.2.0
       expr-eval: 2.0.2
       flat: 5.0.2
       langsmith: 0.1.14
       uuid: 9.0.1
       zod: 3.22.4
+      zod-to-json-schema: 3.22.5(zod@3.22.4)
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@langchain/core@0.1.52:
-    resolution: {integrity: sha512-AEyP99r7jijF33pyzaWtqCkiO9crotgethqq7jznAGlIojMCL9BT/id2DjVyN32SGFTpet273kkjsmEdFSHqpA==}
+  /@langchain/core@0.1.61:
+    resolution: {integrity: sha512-C8OkAly+ugvXsL8TACCmFv9WTTcT4gvQaG6NbrXCOzibBCywfxxcTqEMOyg3zIKpxHEmR0DHqh0OiJRHocnsCg==}
     engines: {node: '>=18'}
     dependencies:
       ansi-styles: 5.2.0
@@ -551,6 +558,7 @@ packages:
       js-tiktoken: 1.0.10
       langsmith: 0.1.14
       ml-distance: 4.0.1
+      mustache: 4.2.0
       p-queue: 6.6.2
       p-retry: 4.6.2
       uuid: 9.0.1
@@ -562,7 +570,7 @@ packages:
     resolution: {integrity: sha512-cD9xPDDXK2Cjs6yYg27BpdzBnQZvBb1yaNgMoGLWIT27UQVRyT96PLC1OVMQOmMmHaKDBCj/1bW4GQQgX7+d2Q==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.52
+      '@langchain/core': 0.1.61
       js-tiktoken: 1.0.10
       openai: 4.33.0
       zod: 3.22.4
@@ -575,7 +583,20 @@ packages:
     resolution: {integrity: sha512-FpqYvVRP2CkFFjTLrj2tbXeY6JTIgbq8tRoi0rvGzmhRpoi6cWHlfgclSzDm+e6P9DqKBkzDjo6SPTJgTOabNA==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.52
+      '@langchain/core': 0.1.61
+      js-tiktoken: 1.0.10
+      openai: 4.33.0
+      zod: 3.22.4
+      zod-to-json-schema: 3.22.5(zod@3.22.4)
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /@langchain/openai@0.0.28:
+    resolution: {integrity: sha512-2s1RA3/eAnz4ahdzsMPBna9hfAqpFNlWdHiPxVGZ5yrhXsbLWWoPcF+22LCk9t0HJKtazi2GCIWc0HVXH9Abig==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@langchain/core': 0.1.61
       js-tiktoken: 1.0.10
       openai: 4.33.0
       zod: 3.22.4
@@ -588,7 +609,7 @@ packages:
     resolution: {integrity: sha512-9Rme771vHbRKXHy0IxOFFUyYtJfL+I1LgleF1cSkb2ZxgtOwN7uvh0Cp23WrCzEh8DHVEaRYPSbBC4W3YfqwfA==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.52
+      '@langchain/core': 0.1.61
       '@pinecone-database/pinecone': 2.2.0
       flat: 5.0.2
       uuid: 9.0.1
@@ -2919,8 +2940,8 @@ packages:
         optional: true
     dependencies:
       '@anthropic-ai/sdk': 0.9.1
-      '@langchain/community': 0.0.43(@pinecone-database/pinecone@2.2.0)
-      '@langchain/core': 0.1.52
+      '@langchain/community': 0.0.53(@pinecone-database/pinecone@2.2.0)
+      '@langchain/core': 0.1.61
       '@langchain/openai': 0.0.26
       '@pinecone-database/pinecone': 2.2.0
       binary-extensions: 2.3.0
@@ -2954,6 +2975,7 @@ packages:
       - '@gradientai/nodejs-sdk'
       - '@huggingface/inference'
       - '@mozilla/readability'
+      - '@neondatabase/serverless'
       - '@opensearch-project/opensearch'
       - '@planetscale/database'
       - '@premai/prem-sdk'
@@ -2983,6 +3005,7 @@ packages:
       - cohere-ai
       - discord.js
       - dria
+      - duck-duck-scrape
       - encoding
       - firebase-admin
       - googleapis
@@ -3197,6 +3220,11 @@ packages:
 
   /ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
+    dev: false
+
+  /mustache@4.2.0:
+    resolution: {integrity: sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ==}
+    hasBin: true
     dev: false
 
   /mz@2.7.0:
