@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@langchain/core': 0.1.52
+  '@langchain/core': 0.1.61
   md5@^2.3.0: 2.1.0
 
 dependencies:
@@ -13,8 +13,8 @@ dependencies:
     specifier: ^0.0.53
     version: 0.0.53(@pinecone-database/pinecone@2.2.0)
   '@langchain/core':
-    specifier: 0.1.52
-    version: 0.1.52
+    specifier: 0.1.61
+    version: 0.1.61
   '@langchain/openai':
     specifier: ^0.0.25
     version: 0.0.25
@@ -535,7 +535,7 @@ packages:
       ws:
         optional: true
     dependencies:
-      '@langchain/core': 0.1.52
+      '@langchain/core': 0.1.61
       '@langchain/openai': 0.0.28
       '@pinecone-database/pinecone': 2.2.0
       expr-eval: 2.0.2
@@ -548,8 +548,8 @@ packages:
       - encoding
     dev: false
 
-  /@langchain/core@0.1.52:
-    resolution: {integrity: sha512-AEyP99r7jijF33pyzaWtqCkiO9crotgethqq7jznAGlIojMCL9BT/id2DjVyN32SGFTpet273kkjsmEdFSHqpA==}
+  /@langchain/core@0.1.61:
+    resolution: {integrity: sha512-C8OkAly+ugvXsL8TACCmFv9WTTcT4gvQaG6NbrXCOzibBCywfxxcTqEMOyg3zIKpxHEmR0DHqh0OiJRHocnsCg==}
     engines: {node: '>=18'}
     dependencies:
       ansi-styles: 5.2.0
@@ -558,6 +558,7 @@ packages:
       js-tiktoken: 1.0.10
       langsmith: 0.1.14
       ml-distance: 4.0.1
+      mustache: 4.2.0
       p-queue: 6.6.2
       p-retry: 4.6.2
       uuid: 9.0.1
@@ -569,7 +570,7 @@ packages:
     resolution: {integrity: sha512-cD9xPDDXK2Cjs6yYg27BpdzBnQZvBb1yaNgMoGLWIT27UQVRyT96PLC1OVMQOmMmHaKDBCj/1bW4GQQgX7+d2Q==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.52
+      '@langchain/core': 0.1.61
       js-tiktoken: 1.0.10
       openai: 4.33.0
       zod: 3.22.4
@@ -582,7 +583,7 @@ packages:
     resolution: {integrity: sha512-FpqYvVRP2CkFFjTLrj2tbXeY6JTIgbq8tRoi0rvGzmhRpoi6cWHlfgclSzDm+e6P9DqKBkzDjo6SPTJgTOabNA==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.52
+      '@langchain/core': 0.1.61
       js-tiktoken: 1.0.10
       openai: 4.33.0
       zod: 3.22.4
@@ -595,7 +596,7 @@ packages:
     resolution: {integrity: sha512-2s1RA3/eAnz4ahdzsMPBna9hfAqpFNlWdHiPxVGZ5yrhXsbLWWoPcF+22LCk9t0HJKtazi2GCIWc0HVXH9Abig==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.52
+      '@langchain/core': 0.1.61
       js-tiktoken: 1.0.10
       openai: 4.33.0
       zod: 3.22.4
@@ -608,7 +609,7 @@ packages:
     resolution: {integrity: sha512-9Rme771vHbRKXHy0IxOFFUyYtJfL+I1LgleF1cSkb2ZxgtOwN7uvh0Cp23WrCzEh8DHVEaRYPSbBC4W3YfqwfA==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.52
+      '@langchain/core': 0.1.61
       '@pinecone-database/pinecone': 2.2.0
       flat: 5.0.2
       uuid: 9.0.1
@@ -2940,7 +2941,7 @@ packages:
     dependencies:
       '@anthropic-ai/sdk': 0.9.1
       '@langchain/community': 0.0.53(@pinecone-database/pinecone@2.2.0)
-      '@langchain/core': 0.1.52
+      '@langchain/core': 0.1.61
       '@langchain/openai': 0.0.26
       '@pinecone-database/pinecone': 2.2.0
       binary-extensions: 2.3.0
@@ -3219,6 +3220,11 @@ packages:
 
   /ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
+    dev: false
+
+  /mustache@4.2.0:
+    resolution: {integrity: sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ==}
+    hasBin: true
     dev: false
 
   /mz@2.7.0:
