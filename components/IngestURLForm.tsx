@@ -8,14 +8,15 @@ import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 
+
 export function IngestURLForm() {
   const inputStyle = {
     outline: 'none',
     flexGrow: 2
   }
   const inputWrapperStyle = {
-    outline: '1px solid #000',
-    flexDirection: 'row'
+    outline: "1px solid #000",
+    flexDirection: "row"
   }
   const uploadBtnStyle = {
     margin: '0.3rem'
@@ -35,7 +36,12 @@ export function IngestURLForm() {
   
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = (event: Object, reason: string | undefined) => {
+    console.log(reason)
+    if(reason !== 'backdropClick') {
+      setOpen(false)
+    }
+  };
   const [url, setUrl] = useState('');
 
   async function uploadURL(e: FormEvent<HTMLFormElement>) {
