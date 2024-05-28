@@ -15,7 +15,7 @@ import { IngestURLForm } from '@/components/IngestURLForm';
 
 export function ChatWindow(props: {
   endpoint: string,
-  emptyStateComponent: ReactElement,
+  emptyStateComponent?: ReactElement,
   placeholder?: string,
   titleText?: string,
   emoji?: string;
