@@ -6,7 +6,7 @@ export default function QuickStart() {
       <ChatWindow
         endpoint="api/chat/rag_url"
         titleText="RAG with URLs"
-        placeholder="As questions about the content of the upload URL?"
+        placeholder="Upload URL to get better results"
         // showModelOptions={true}
         showURLIngestForm={true}
       ></ChatWindow>
