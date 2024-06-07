@@ -12,10 +12,11 @@ import { ChatMessageBubble } from "@/components/ChatMessageBubble";
 import { UploadDocumentsForm } from "@/components/UploadDocumentsForm";
 import { IntermediateStep } from "./IntermediateStep";
 import { IngestURLForm } from '@/components/IngestURLForm';
+import { Button } from '@mui/material';
 
 export function ChatWindow(props: {
   endpoint: string,
-  emptyStateComponent: ReactElement,
+  emptyStateComponent?: ReactElement,
   placeholder?: string,
   titleText?: string,
   emoji?: string;
@@ -41,6 +42,13 @@ export function ChatWindow(props: {
       <label htmlFor="show_intermediate_steps"> Show intermediate steps</label>
     </div>
   );
+  const inputWrapperStyle = {
+    backgroundColor: 'white' as 'white',
+    outline: '1px solid gray'
+  }
+  const chatBtnStyle = {
+    color: 'gray'
+  }
 
   const modelOptions = showModelOptions && (
     <>
@@ -144,7 +152,6 @@ export function ChatWindow(props: {
       </div>
 
       {messages.length === 0 && ingestForm}
-      {urlIngestForm}
       <form onSubmit={sendMessage} className="flex w-full flex-col">
         <div className="flex">
           {intemediateStepsToggle}
@@ -152,14 +159,17 @@ export function ChatWindow(props: {
         <div className="flex">
           {modelOptions}
         </div>
-        <div className="flex w-full mt-4">
-          <input
-            className="grow mr-8 p-4 rounded"
-            value={input}
-            placeholder={placeholder ?? "What's it like to be a pirate?"}
-            onChange={handleInputChange}
-          />
-          <button type="submit" className="shrink-0 px-8 py-4 bg-sky-600 rounded w-28">
+          <div className='flex w-full' style={inputWrapperStyle}>
+            <input
+              className="w-full p-4 pl-16 rounded"
+              value={input}
+              placeholder={placeholder ?? "What's it like to be a pirate?"}
+              onChange={handleInputChange}
+            />
+            <div className='absolute'>
+              {urlIngestForm}
+            </div>
+          <Button type="submit" className="m-2 p-2 rounded w-28" style={chatBtnStyle}>
             <div role="status" className={`${(chatEndpointIsLoading || intermediateStepsLoading) ? "" : "hidden"} flex justify-center`}>
               <svg aria-hidden="true" className="w-6 h-6 text-white animate-spin dark:text-white fill-sky-800" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -168,7 +178,7 @@ export function ChatWindow(props: {
               <span className="sr-only">Loading...</span>
             </div>
             <span className={(chatEndpointIsLoading || intermediateStepsLoading) ? "hidden" : ""}>Send</span>
-          </button>
+          </Button>
         </div>
       </form>
       <ToastContainer/>
